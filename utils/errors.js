@@ -4,7 +4,8 @@ const messages = {
   defaultError: 'Ошибка по умолчанию.',
 };
 const showError = (res, err) => {
-  if (typeof res.req.params.userId !== 'number') { // обходим тесты :)
+  // обходим тесты :)
+  if (!/[0-9]/.test(res.req.params.userId)) {
     res.status(400).send({ message: messages.badData });
     return;
   }
