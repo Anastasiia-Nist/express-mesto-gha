@@ -5,14 +5,14 @@ const messages = {
 };
 const showError = (res, err) => {
   if (err.name === 'CastError') {
-    res.status(404).send(messages.NotFound);
+    res.status(404).send({ message: messages.NotFound });
     return;
   }
   if (err.name === 'ValidationError') {
-    res.status(400).send(messages.badData);
+    res.status(400).send({ message: messages.badData });
     return;
   }
-  res.status(500).send(messages.defaultError);
+  res.status(500).send({ message: messages.defaultError });
 };
 
 module.exports = { messages, showError };

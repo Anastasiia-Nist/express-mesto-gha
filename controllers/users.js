@@ -4,7 +4,7 @@ const { messages, showError } = require('../utils/errors');
 const getUsers = (req, res) => {
   User.find({})
     .then((users) => res.send(users))
-    .catch(() => res.status(500).send(messages.defaultError));
+    .catch(() => res.status(500).send({ message: messages.defaultError }));
 };
 
 const getUserById = (req, res) => {

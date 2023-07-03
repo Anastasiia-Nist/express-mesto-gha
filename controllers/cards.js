@@ -4,7 +4,7 @@ const { messages, showError } = require('../utils/errors');
 const getCards = (req, res) => {
   Card.find({})
     .then((cards) => res.send(cards))
-    .catch(() => res.status(500).send(messages.defaultError));
+    .catch(() => res.status(500).send({ message: messages.defaultError }));
 };
 
 const createCard = (req, res) => {
