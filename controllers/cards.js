@@ -15,10 +15,15 @@ const createCard = (req, res) => {
     .then((card) => res.send(card))
     .catch((err) => showError(res, err));
 };
+
 const deleteCard = (req, res) => {
   Card.findByIdAndDelete(req.params.cardId)
-    .then(() => {
-      res.send({ message: 'Карточка удалена' });
+    .then((card) => {
+      if (!card) {
+        res.status(404).send({ message: messages.badData });
+      } else {
+        res.send({ message: 'Карточка удалена' });
+      }
     })
     .catch((err) => showError(res, err));
 };
@@ -29,9 +34,12 @@ const likeCard = (req, res) => {
     { $addToSet: { likes: req.user._id } },
     { new: true },
   )
-    .orFail(() => res.status(404).send({ message: messages.NotFound }))
     .then((card) => {
-      res.send((card));
+      if (!card) {
+        res.status(404).send({ message: messages.badData });
+      } else {
+        res.send(card);
+      }
     })
     .catch((err) => showError(res, err));
 };
@@ -42,9 +50,12 @@ const dislikeCard = (req, res) => {
     { $pull: { likes: req.user._id } },
     { new: true },
   )
-    .orFail(() => res.status(404).send({ message: messages.NotFound }))
     .then((card) => {
-      res.send((card));
+      if (!card) {
+        res.status(404).send({ message: messages.badData });
+      } else {
+        res.send(card);
+      }
     })
     .catch((err) => showError(res, err));
 };

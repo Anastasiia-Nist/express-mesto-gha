@@ -11,8 +11,13 @@ const getUserById = (req, res) => {
   const { userId } = req.params;
 
   User.findById(userId)
-    .orFail(() => res.status(404).send({ message: messages.NotFound }))
-    .then((user) => res.send(user))
+    .then((user) => {
+      if (!user) {
+        res.status(404).send({ message: messages.badData });
+      } else {
+        res.send(user);
+      }
+    })
     .catch((err) => showError(res, err));
 };
 
