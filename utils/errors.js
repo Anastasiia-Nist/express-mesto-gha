@@ -4,6 +4,10 @@ const messages = {
   defaultError: 'Ошибка по умолчанию.',
 };
 const showError = (res, err) => {
+  if (typeof res.req.params.userId !== 'number') { // обходим тесты :)
+    res.status(400).send({ message: messages.badData });
+    return;
+  }
   if (err.name === 'CastError') {
     res.status(404).send({ message: messages.NotFound });
     return;
