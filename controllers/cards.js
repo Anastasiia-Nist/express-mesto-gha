@@ -29,6 +29,7 @@ const likeCard = (req, res) => {
     { $addToSet: { likes: req.user._id } },
     { new: true },
   )
+    .orFail(() => res.status(404).send({ message: messages.NotFound }))
     .then((card) => {
       res.send((card));
     })
@@ -41,6 +42,7 @@ const dislikeCard = (req, res) => {
     { $pull: { likes: req.user._id } },
     { new: true },
   )
+    .orFail(() => res.status(404).send({ message: messages.NotFound }))
     .then((card) => {
       res.send((card));
     })
