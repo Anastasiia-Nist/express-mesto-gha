@@ -4,16 +4,7 @@ const messages = {
   defaultError: 'Ошибка по умолчанию.',
 };
 const showError = (res, err) => {
-  // обходим тесты :)
-  if (!/[0-9]/.test(res.req.params.userId)) {
-    res.status(400).send({ message: messages.badData });
-    return;
-  }
-  if (err.name === 'CastError') {
-    res.status(404).send({ message: messages.NotFound });
-    return;
-  }
-  if (err.name === 'ValidationError') {
+  if (err.name === 'ValidationError' || err.name === 'CastError') {
     res.status(400).send({ message: messages.badData });
     return;
   }
