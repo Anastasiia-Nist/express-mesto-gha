@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const bodyParser = require('body-parser');
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
+const { statuses } = require('./utils/errors');
 
 const app = express();
 
@@ -36,8 +37,8 @@ app.use((req, res, next) => {
 
 app.use('/users', usersRouter);
 app.use('/cards', cardsRouter);
-app.use('/', (req, res) => {
-  res.status(404).send({ message: 'Страница не найдена' });
+app.use((req, res) => {
+  res.status(statuses.notFound).send({ message: 'Страница не найдена' });
 });
 
 app.listen(3000);

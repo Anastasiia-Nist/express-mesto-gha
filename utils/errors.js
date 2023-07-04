@@ -3,7 +3,6 @@ const statuses = {
   notFound: 404,
   default: 500,
 };
-
 const messages = {
   badData: 'Переданы некорректные данные.',
   NotFound: 'Данные по указанному _id не найдены.',
@@ -11,10 +10,10 @@ const messages = {
 };
 const showError = (res, err) => {
   if (err.name === 'ValidationError' || err.name === 'CastError') {
-    res.status(400).send({ message: messages.badData });
+    res.status(statuses.badRequest).send({ message: messages.badData });
     return;
   }
-  res.status(500).send({ message: messages.defaultError });
+  res.status(statuses.default).send({ message: messages.defaultError });
 };
 
 module.exports = { messages, showError, statuses };
