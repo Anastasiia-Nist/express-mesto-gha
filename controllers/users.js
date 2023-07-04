@@ -1,10 +1,10 @@
 const User = require('../models/user');
-const { messages, showError } = require('../utils/errors');
+const { messages, showError, statuses } = require('../utils/errors');
 
 const getUsers = (req, res) => {
   User.find({})
     .then((users) => res.send(users))
-    .catch(() => res.status(500).send({ message: messages.defaultError }));
+    .catch(() => res.status(statuses.default).send({ message: messages.defaultError }));
 };
 
 const getUserById = (req, res) => {
@@ -13,7 +13,7 @@ const getUserById = (req, res) => {
   User.findById(userId)
     .then((user) => {
       if (!user) {
-        res.status(404).send({ message: messages.NotFound });
+        res.status(statuses.notFound).send({ message: messages.NotFound });
       } else {
         res.send(user);
       }
@@ -35,7 +35,7 @@ const updateUserProfile = (req, res) => {
   User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
     .then((user) => {
       if (!user) {
-        res.status(404).send({ message: messages.NotFound });
+        res.status(statuses.notFound).send({ message: messages.NotFound });
       } else {
         res.send(user);
       }
@@ -46,10 +46,10 @@ const updateUserProfile = (req, res) => {
 const updateUserAvatar = (req, res) => {
   const { avatar } = req.body;
 
-  User.findByIdAndUpdate(req.user._id, { avatar }, { new: true })
+  User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
     .then((user) => {
       if (!user) {
-        res.status(404).send({ message: messages.NotFound });
+        res.status(statuses.notFound).send({ message: messages.NotFound });
       } else {
         res.send(user);
       }

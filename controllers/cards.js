@@ -1,10 +1,10 @@
 const Card = require('../models/card');
-const { messages, showError } = require('../utils/errors');
+const { messages, showError, statuses } = require('../utils/errors');
 
 const getCards = (req, res) => {
   Card.find({})
     .then((cards) => res.send(cards))
-    .catch(() => res.status(500).send({ message: messages.defaultError }));
+    .catch(() => res.status(statuses.default).send({ message: messages.defaultError }));
 };
 
 const createCard = (req, res) => {
@@ -20,7 +20,7 @@ const deleteCard = (req, res) => {
   Card.findByIdAndDelete(req.params.cardId)
     .then((card) => {
       if (!card) {
-        res.status(404).send({ message: messages.NotFound });
+        res.status(statuses.notFound).send({ message: messages.NotFound });
       } else {
         res.send({ message: 'Карточка удалена' });
       }
@@ -36,7 +36,7 @@ const likeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        res.status(404).send({ message: messages.NotFound });
+        res.status(statuses.notFound).send({ message: messages.NotFound });
       } else {
         res.send(card);
       }
@@ -52,7 +52,7 @@ const dislikeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        res.status(404).send({ message: messages.NotFound });
+        res.status(statuses.notFound).send({ message: messages.NotFound });
       } else {
         res.send(card);
       }

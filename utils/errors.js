@@ -1,3 +1,9 @@
+const statuses = {
+  badRequest: 400,
+  notFound: 404,
+  default: 500,
+};
+
 const messages = {
   badData: 'Переданы некорректные данные.',
   NotFound: 'Данные по указанному _id не найдены.',
@@ -11,4 +17,4 @@ const showError = (res, err) => {
   res.status(500).send({ message: messages.defaultError });
 };
 
-module.exports = { messages, showError };
+module.exports = { messages, showError, statuses };
