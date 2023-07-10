@@ -13,7 +13,7 @@ const getUserById = (req, res) => {
   User.findById(userId)
     .then((user) => {
       if (!user) {
-        res.status(statuses.notFound).send({ message: messages.NotFound });
+        throw new Error();
       } else {
         res.send(user);
       }
@@ -35,7 +35,7 @@ const updateUserProfile = (req, res) => {
   User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
     .then((user) => {
       if (!user) {
-        res.status(statuses.notFound).send({ message: messages.NotFound });
+        throw new Error();
       } else {
         res.send(user);
       }
@@ -49,7 +49,7 @@ const updateUserAvatar = (req, res) => {
   User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
     .then((user) => {
       if (!user) {
-        res.status(statuses.notFound).send({ message: messages.NotFound });
+        throw new Error();
       } else {
         res.send(user);
       }

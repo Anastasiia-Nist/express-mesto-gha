@@ -20,7 +20,7 @@ const deleteCard = (req, res) => {
   Card.findByIdAndDelete(req.params.cardId)
     .then((card) => {
       if (!card) {
-        res.status(statuses.notFound).send({ message: messages.NotFound });
+        throw new Error();
       } else {
         res.send({ message: 'Карточка удалена' });
       }
@@ -36,7 +36,7 @@ const likeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        res.status(statuses.notFound).send({ message: messages.NotFound });
+        throw new Error();
       } else {
         res.send(card);
       }
@@ -52,7 +52,7 @@ const dislikeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        res.status(statuses.notFound).send({ message: messages.NotFound });
+        throw new Error();
       } else {
         res.send(card);
       }
