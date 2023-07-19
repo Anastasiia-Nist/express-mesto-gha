@@ -4,9 +4,12 @@ const mongoose = require('mongoose');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const bodyParser = require('body-parser');
+// const cookieParser = require('cookie-parser');
+const { createUser, login } = require('./controllers/users');
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
 const { statuses } = require('./utils/errors');
+const authMiddleware = require('./middlewares/auth');
 
 const app = express();
 
@@ -26,17 +29,13 @@ app.use(limiter);
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
 
 app.use(bodyParser.json());
+// app.use(cookieParser());
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: '64a2a1ee8038a3f41b443963',
-  };
+app.post('/signin', login);
+app.post('/signup', createUser);
+app.use('/users', authMiddleware, usersRouter);
+app.use('/cards', authMiddleware, cardsRouter);
 
-  next();
-});
-
-app.use('/users', usersRouter);
-app.use('/cards', cardsRouter);
 app.use((req, res) => {
   res.status(statuses.notFound).send({ message: 'Страница не найдена' });
 });

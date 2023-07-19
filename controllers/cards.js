@@ -17,12 +17,18 @@ const createCard = (req, res) => {
 };
 
 const deleteCard = (req, res) => {
-  Card.findByIdAndDelete(req.params.cardId)
+  Card.findById(req.params.cardId)
     .then((card) => {
       if (!card) {
         throw new Error();
+      }
+      if (card.owner.toString() !== req.user._id) {
+        res.status(403).send({ message: 'Вы не можете удалить чужую карточку' });
       } else {
-        res.send({ message: 'Карточка удалена' });
+        Card.findByIdAndDelete(req.params.cardId)
+          .then(() => {
+            res.send({ message: 'Карточка удалена' });
+          });
       }
     })
     .catch((err) => showError(res, err));
