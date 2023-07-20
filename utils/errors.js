@@ -2,7 +2,7 @@ const statuses = {
   badRequest: 400,
   notFound: 404,
   default: 500,
-  coflict: 409,
+  conflict: 409,
   forbidden: 403,
   unauthorized: 401,
 };
