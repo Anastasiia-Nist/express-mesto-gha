@@ -4,12 +4,16 @@ const mongoose = require('mongoose');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const bodyParser = require('body-parser');
+const { errors } = require('celebrate');
 // const cookieParser = require('cookie-parser');
+const { signinValidation, signupValidation } = require('./middlewares/validation');
+const authMiddleware = require('./middlewares/auth');
+const errorsMiddleware = require('./middlewares/errors');
 const { createUser, login } = require('./controllers/users');
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
-const { statuses } = require('./utils/errors');
-const authMiddleware = require('./middlewares/auth');
+const { messages } = require('./utils/errors');
+const NotFoundError = require('./errors/NotFoundError');
 
 const app = express();
 
@@ -31,13 +35,20 @@ mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
 app.use(bodyParser.json());
 // app.use(cookieParser());
 
-app.post('/signin', login);
-app.post('/signup', createUser);
+/*  app.use((req, res, next) => {
+  req.user = {
+    _id: '64a2a1ee8038a3f41b443963',
+  };  */
+
+app.post('/signin', signinValidation, login);
+app.post('/signup', signupValidation, createUser);
 app.use('/users', authMiddleware, usersRouter);
 app.use('/cards', authMiddleware, cardsRouter);
 
-app.use((req, res) => {
-  res.status(statuses.notFound).send({ message: 'Страница не найдена' });
+app.use((req, res, next) => {
+  next(new NotFoundError(messages.notFound));
 });
+app.use(errors()); // обработчик ошибок celebrate
+app.use(errorsMiddleware); // централизованный обработчик
 
 app.listen(3000);

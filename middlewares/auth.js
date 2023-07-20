@@ -1,13 +1,11 @@
-// middlewares/auth.js
-
 const jwt = require('jsonwebtoken');
+const UnauthorizedError = require('../errors/UnauthorizedError');
+const { messages } = require('../utils/errors');
 
 const authMiddleware = (req, res, next) => {
   const { authorization } = req.headers;
   if (!authorization || !authorization.startsWith('Bearer ')) {
-    res
-      .status(401)
-      .send({ message: 'Необходима авторизация' });
+    throw new UnauthorizedError(messages.unauthorized);
   }
 
   const token = authorization.replace('Bearer ', '');
@@ -16,14 +14,11 @@ const authMiddleware = (req, res, next) => {
   try {
     payload = jwt.verify(token, 'some-secret-key');
   } catch (err) {
-    res
-      .status(401)
-      .send({ message: 'Необходима авторизация' });
+    throw new UnauthorizedError(messages.unauthorized);
   }
 
   req.user = payload; // записываем пейлоуд в объект запроса
-
-  next(); // пропускаем запрос дальше
+  next();
 };
 
 module.exports = authMiddleware;

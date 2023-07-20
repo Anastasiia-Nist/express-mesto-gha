@@ -1,42 +1,43 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const { messages, showError, statuses } = require('../utils/errors');
+const { messages } = require('../utils/errors');
+const NotFoundError = require('../errors/NotFoundError');
 
-const getUsers = (req, res) => {
+const getUsers = (req, res, next) => {
   User.find({})
     .then((users) => res.send(users))
-    .catch(() => res.status(statuses.default).send({ message: messages.defaultError }));
+    .catch(next);
 };
 
-const getUserById = (req, res) => {
+const getUserById = (req, res, next) => {
   const { userId } = req.params;
 
   User.findById(userId)
     .then((user) => {
       if (!user) {
-        throw new Error();
+        throw new NotFoundError(messages.user.notFound);
       } else {
         res.send(user);
       }
     })
-    .catch((err) => showError(res, err));
+    .catch(next);
 };
 
-const getCurrentUser = (req, res) => {
+const getCurrentUser = (req, res, next) => {
   const userId = req.user._id;
   User.findById(userId)
     .then((user) => {
       if (!user) {
-        throw new Error();
+        throw new NotFoundError(messages.user.notFound);
       } else {
         res.send(user);
       }
     })
-    .catch((err) => showError(res, err));
+    .catch(next);
 };
 
-const createUser = (req, res) => {
+const createUser = (req, res, next) => {
   const {
     name,
     about,
@@ -52,39 +53,47 @@ const createUser = (req, res) => {
       email,
       password: hash,
     }))
-    .then((user) => res.send(user))
-    .catch((err) => showError(res, err));
+    .then((user) => {
+      res.send({
+        _id: user._id,
+        name: user.name,
+        about: user.about,
+        avatar: user.avatar,
+        email: user.email,
+      });
+    })
+    .catch(next);
 };
 
-const updateUserProfile = (req, res) => {
+const updateUserProfile = (req, res, next) => {
   const { name, about } = req.body;
 
   User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
     .then((user) => {
       if (!user) {
-        throw new Error();
+        throw new NotFoundError(messages.user.notFound);
       } else {
         res.send(user);
       }
     })
-    .catch((err) => showError(res, err));
+    .catch(next);
 };
 
-const updateUserAvatar = (req, res) => {
+const updateUserAvatar = (req, res, next) => {
   const { avatar } = req.body;
 
   User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
     .then((user) => {
       if (!user) {
-        throw new Error();
+        throw new NotFoundError(messages.user.notFound);
       } else {
         res.send(user);
       }
     })
-    .catch((err) => showError(res, err));
+    .catch(next);
 };
 
-const login = (req, res) => {
+const login = (req, res, next) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => {
@@ -98,11 +107,7 @@ const login = (req, res) => {
       // вернём токен
       res.send({ token });
     })
-    .catch(() => {
-      res
-        .status(401)
-        .send({ message: 'Проверьте введённые почту и пароль или зарегистрируйтесь.' });
-    });
+    .catch(next);
 };
 
 module.exports = {

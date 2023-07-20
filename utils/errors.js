@@ -2,22 +2,24 @@ const statuses = {
   badRequest: 400,
   notFound: 404,
   default: 500,
+  coflict: 409,
+  forbidden: 403,
+  unauthorized: 401,
 };
 const messages = {
-  badData: 'Переданы некорректные данные.',
-  notFound: 'Данные по указанному _id не найдены.',
-  defaultError: 'Ошибка по умолчанию.',
-};
-const showError = (res, err) => {
-  if (err.name === 'ValidationError' || err.name === 'CastError') {
-    res.status(statuses.badRequest).send({ message: messages.badData });
-    return;
-  }
-  if (err.name === 'Error') {
-    res.status(statuses.notFound).send({ message: messages.notFound });
-    return;
-  }
-  res.status(statuses.default).send({ message: messages.defaultError });
+  notFound: 'По указанному пути ничего не найдено',
+  serverError: 'На сервере произошла ошибка',
+  unauthorized: 'Необходима авторизация',
+  user: {
+    notFound: 'Пользователь по данному id не найден',
+    loginBadData: 'Передан неверный логин или пароль',
+    conflictEmail: 'Пользователь с указанным email уже существует',
+  },
+  card: {
+    notFound: 'Карточка с указанным id не найдена',
+    badData: 'Переданы некорректные данные при создании карточки',
+    cannotDeleted: 'Вы можете удалять только свои карточки',
+  },
 };
 
-module.exports = { messages, showError, statuses };
+module.exports = { statuses, messages };
