@@ -14,7 +14,7 @@ const createCard = (req, res, next) => {
   const owner = req.user._id;
 
   Card.create({ name, link, owner })
-    .then((card) => res.send(card))
+    .then((card) => res.status(201).send(card))
     .catch(next);
 };
 
@@ -27,7 +27,7 @@ const deleteCard = (req, res, next) => {
       if (card.owner.toString() !== req.user._id) {
         throw new ForbiddenError(messages.card.cannotDeleted);
       } else {
-        Card.findByIdAndDelete(req.params.cardId)
+        Card.deleteOne(card)
           .then(() => {
             res.send({ message: 'Карточка удалена' });
           })
