@@ -1,17 +1,35 @@
-[![Tests](../../actions/workflows/tests-13-sprint.yml/badge.svg)](../../actions/workflows/tests-13-sprint.yml) [![Tests](../../actions/workflows/tests-14-sprint.yml/badge.svg)](../../actions/workflows/tests-14-sprint.yml)
-# Проект Mesto фронтенд + бэкенд
+[![Tests](../../actions/workflows/tests-14-sprint.yml/badge.svg)](../../actions/workflows/tests-14-sprint.yml)
+# Бэкэнд проекта Mesto
+### *Учебный проект от [Яндекс.Практикум](https://practicum.yandex.ru/web/)*
 
-## [Ссылка на репозиторий](https://github.com/Anastasiia-Nist/express-mesto-gha)
+### Обзор:
+**Создание сервера и настройка запросов**
 
-## Директории
+## Функционал:
+  - Авторизация и регистрация;
+  - Редактирование аватара и профиля;
+  - Добавление и удаление карточек и лайков;
+  - Валидация.
+
+## В этом проекте используются:
+* JavaScript:
+  - Асинхронность и оптимизация;
+  - Rest API;
+* Node.js;
+* Express;
+* MongoDB.
+
+## Директории:
 
 `/routes` — папка с файлами роутера  
 `/controllers` — папка с файлами контроллеров пользователя и карточки   
-`/models` — папка с файлами описания схем пользователя и карточки  
+`/models` — папка с файлами описания схем пользователя и карточки
+`/errors` — папка с классами ошибок
   
-Остальные директории вспомогательные, создаются при необходимости разработчиком
 
 ## Запуск проекта
 
 `npm run start` — запускает сервер   
 `npm run dev` — запускает сервер с hot-reload
+
+## [Ссылка на репозиторий](https://github.com/Anastasiia-Nist/express-mesto-gha)
