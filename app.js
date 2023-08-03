@@ -37,11 +37,6 @@ mongoose.connect(DB_URL);
 app.use(bodyParser.json());
 // app.use(cookieParser());
 
-/*  app.use((req, res, next) => {
-  req.user = {
-    _id: '64a2a1ee8038a3f41b443963',
-  };  */
-
 app.post('/signin', signinValidation, login);
 app.post('/signup', signupValidation, createUser);
 app.use('/users', authMiddleware, usersRouter);
