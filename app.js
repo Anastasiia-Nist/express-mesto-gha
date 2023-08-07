@@ -5,7 +5,6 @@ const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
-// const cookieParser = require('cookie-parser');
 const { signinValidation, signupValidation } = require('./middlewares/validation');
 const authMiddleware = require('./middlewares/auth');
 const errorsMiddleware = require('./middlewares/errors');
@@ -35,7 +34,6 @@ app.use(limiter);
 mongoose.connect(DB_URL);
 
 app.use(bodyParser.json());
-// app.use(cookieParser());
 
 app.post('/signin', signinValidation, login);
 app.post('/signup', signupValidation, createUser);
